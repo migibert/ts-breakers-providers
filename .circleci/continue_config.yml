@@ -1,0 +1,61 @@
+version: 2.1
+
+orbs:
+  node: circleci/node@5.1.0
+  codecov: codecov/codecov@3.2.4
+
+jobs:
+  test:
+    docker:
+      - image: cimg/redis:6.2.6
+    parameters:
+      path:
+        type: string
+        default: ""
+    steps:
+      - checkout
+      - node/run:
+          working_directory: << parameters.provider-path >>
+          name: lint
+          npm-run: lint          
+      - node/test:
+          working_directory: << parameters.provider-path >>
+          test-results-for: jest
+          test-results-path: junit.xml
+          requires: 
+            - lint
+          post-steps:
+            - codecov/upload
+  publish:
+    executor: node/default
+    parameters:
+      path:
+        type: string
+        default: ""
+    steps:
+      - checkout  
+      - node/install-packages:
+          working_directory: << parameters.provider-path >>
+      - run:
+          working_directory: << parameters.provider-path >>
+          command: |
+            npm set //registry.npmjs.org/:_authToken=$NPM_TOKEN
+            npm publish
+
+
+workflows:
+  test-and-deploy:
+    parameters:
+      provider-path:
+        type: string
+        default: ""
+    jobs:
+      - test:
+          path: << parameters.provider-path >>
+      - publish:
+          path: << parameters.provider-path >>
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /v[0-9]+(\.[0-9]+)*/

@@ -1,0 +1,16 @@
+version: 2.1
+
+setup: true
+
+orbs:
+  path-filtering: circleci/path-filtering@0.1.3
+
+workflows:
+  setup:
+    jobs:
+      - path-filtering/filter:
+          name: check updated files
+          base-revision: main
+          config-path: .circleci/continue_config.yml
+          mapping: |
+            ts-breakers-redis-provider/.* provider-path ts-breakers-redis-provider
