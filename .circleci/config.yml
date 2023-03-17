@@ -9,8 +9,7 @@ workflows:
   setup:
     jobs:
       - path-filtering/filter:
-          name: check updated files
           base-revision: main
           config-path: .circleci/continue_config.yml
           mapping: |
-            ts-breakers-redis-provider/.* provider-path ts-breakers-redis-provider
+            ts-breakers-redis-provider/.* provider-path "ts-breakers-redis-provider"
