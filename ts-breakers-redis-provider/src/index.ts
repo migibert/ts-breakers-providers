@@ -1,0 +1,1 @@
+export { RedisCircuitBreakerStorageStrategy } from './RedisCircuitBreakerStorageStrategy';
