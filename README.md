@@ -1,6 +1,6 @@
 # ts-breakers-providers
 
-This respository aims to enrich [ts-breakers](https://www.npmjs.com/package/ts-breakers) with Remote State providers.
+This repository aims to enrich [ts-breakers](https://www.npmjs.com/package/ts-breakers) with Remote State providers.
 
 Remote providers allow multiple instances of an application to share their state and configuration. 
 
@@ -19,5 +19,5 @@ Currently supported providers:
 Here is the TODO list to add a new provider:
 * Create a folder named `ts-breakers-<datasource>-provider`
 * Add `ts-breakers` as a dependency and implement `CircuitBreakerStorageStrategy` interface
-* Add your [mapping](https://github.com/migibert/ts-breakers-providers/blob/21aefa8766d731fd2c4d1635aeb576337e88aefc/.circleci/config.yml#L15) to the CI configuration
-* Add you [directory](https://github.com/migibert/ts-breakers-providers/blob/21aefa8766d731fd2c4d1635aeb576337e88aefc/.circleci/continue_config.yml#L69) to the CI configuration
+* Add your [mapping](https://github.com/migibert/ts-breakers-providers/blob/05110614f1a24082779d0d28ce2141de814d25ed/.circleci/config.yml#L15) to the CI configuration
+
