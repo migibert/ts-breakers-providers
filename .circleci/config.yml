@@ -13,3 +13,7 @@ workflows:
           config-path: .circleci/continue_config.yml
           mapping: |
             ts-breakers-redis-provider/.* provider-path "ts-breakers-redis-provider"
+          filters:
+            tags:
+              only:
+                - /v[0-9]+(\.[0-9]+)*/

@@ -45,21 +45,28 @@ jobs:
           command: npm set //registry.npmjs.org/:_authToken=$NPM_TOKEN && npm publish
 
 workflows:
-  test-and-publish:
+  lint-test-publish:
+    when: << pipeline.parameters.provider-path >>
     jobs:
       - node/run:
           name: lint
           npm-run: lint
           app-dir: << pipeline.parameters.provider-path >>
+          filters:
+            tags:
+              only: /v[0-9]+(\.[0-9]+)*/
       - test:
           path: << pipeline.parameters.provider-path >>
           requires: 
             - lint
           post-steps:
             - codecov/upload
+          filters:
+            tags:
+              only: /v[0-9]+(\.[0-9]+)*/
       - publish:
           path: << pipeline.parameters.provider-path >>
-          requires: 
+          requires:
             - test
           filters:
             branches:
