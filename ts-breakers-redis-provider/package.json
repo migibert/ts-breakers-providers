@@ -38,6 +38,6 @@
   },
   "dependencies": {
     "redis": "4.6.5",
-    "ts-breakers": "1.1.0"
+    "ts-breakers": "2.0.0"
   }
 }

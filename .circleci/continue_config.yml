@@ -1,0 +1,68 @@
+version: 2.1
+
+orbs:
+  node: circleci/node@5.1.0
+  codecov: codecov/codecov@3.2.4
+
+parameters:
+  provider-path:
+    type: string
+    default: ""
+
+jobs:
+  test:
+    parameters:
+      path:
+        type: string
+        default: ""
+    docker:
+      - image: cimg/node:lts
+      - image: cimg/redis:6.2.6
+    steps:
+      - checkout
+      - node/install-packages:
+          app-dir: << parameters.path >>
+      - run:
+          name: run test suite
+          command: npm test -- --reporters=default --reporters=jest-junit
+          working_directory: << parameters.path >>
+      - store_test_results:
+          path: << parameters.path >>/junit.xml
+
+  publish:
+    parameters:
+      path:
+        type: string
+        default: ""
+    executor: node/default
+    steps:
+      - checkout  
+      - node/install-packages:
+          app-dir: << parameters.path >>
+      - run:
+          name: npm publish
+          working_directory: << parameters.path >>
+          command: npm set //registry.npmjs.org/:_authToken=$NPM_TOKEN && npm publish
+
+workflows:
+  test-and-publish:
+    jobs:
+      - node/run:
+          name: lint
+          npm-run: lint
+          app-dir: << pipeline.parameters.provider-path >>
+      - test:
+          path: << pipeline.parameters.provider-path >>
+          requires: 
+            - lint
+          post-steps:
+            - codecov/upload
+      - publish:
+          path: << pipeline.parameters.provider-path >>
+          requires: 
+            - test
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /v[0-9]+(\.[0-9]+)*/
