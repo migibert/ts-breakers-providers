@@ -13,6 +13,7 @@ workflows:
           config-path: .circleci/continue_config.yml
           mapping: |
             ts-breakers-redis-provider/.* provider-path "ts-breakers-redis-provider"
+            ts-breakers-redis-provider/.* storage-image "cimg/redis:6.2.6"
           filters:
             tags:
               only:
